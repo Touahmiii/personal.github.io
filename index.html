@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Current Time in My Town</title>
+    <script>
+      function displayTime() {
+        var d = new Date();
+        var time = d.toLocaleTimeString();
+        document.getElementById("time").innerHTML = time;
+      }
+
+      setInterval(displayTime, 1000);
+    </script>
+  </head>
+  <body>
+    <h1>Current Time in My Town</h1>
+    <p>The current time is: <span id="time"></span></p>
+  </body>
+</html>
