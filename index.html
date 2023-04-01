@@ -1,87 +1,124 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>FSociety Time</title>
+	<title>FSociety Terminal</title>
 	<style>
-	body {
-		background-color: black;
-		color: lime;
-		font-family: monospace;
-		margin: 0;
-		padding: 0;
-	}
-	h1 {
-		font-size: 5rem;
-		margin-top: 5rem;
-		text-align: center;
-        text-shadow: 0 0 50px lime;
-	}
-	.container {
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
-		align-items: center;
-		height: calc(100vh - 150px);
-	}
-	.clock {
-		position: relative;
-		color: lime;
-		font-size: 10rem;
-		margin: 0 1rem;
-		text-shadow: 0 0 50px lime;
-	}
-	.line {
-		position: absolute;
-		height: 100%;
-		border-left: 2px dashed lime;
-	}
-	.text-container {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		font-size: 3rem;
-		text-align: center;
-		margin: 0 2rem;
-	}
-	.text-container span {
-		margin-bottom: 1rem;
-	}
-	.time {
-		font-size: 15rem;
-	}
-	.time span {
-		padding: 0 1rem;
-	}
+		body {
+			background-color: #0b0f16;
+			color: #28c940;
+			font-family: 'Courier New', monospace;
+			font-size: 16px;
+			margin: 0;
+			padding: 0;
+		}
+		.term {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			display: flex;
+			flex-direction: column;
+			align-items: stretch;
+			padding: 2rem;
+			box-sizing: border-box;
+			overflow-y: scroll;
+			font-size: 1.1rem;
+		}
+		.prompt {
+			display: flex;
+			align-items: center;
+		}
+		.prompt span {
+			margin-right: 1rem;
+		}
+		.prompt input {
+			background: none;
+			color: #28c940;
+			font-family: 'Courier New', monospace;
+			font-size: 1.1rem;
+			border: none; 
+			outline: none;
+			width: 90%;
+		}
+		.output {
+			margin-bottom: 1rem;
+		}
+		.green {
+			color: #28c940;
+		}
+		.white {
+			color: white;
+		}
+		p {
+			margin: 0;
+			padding: 0;
+			display: inline;
+		}
 	</style>
 	<script>
-		function showTime() {
+		document.addEventListener('keydown', function(e) {
+			if (e.key === 'Enter') {
+				handleInput();
+			}
+		});
+
+		function handleInput() {
+			var input = document.getElementById('input');
+			var output = document.getElementById('output');
+			var command = input.value;
+			input.value = '';
+
+			var response = '';
+
+			switch (command) {
+				case 'time':
+					response = getTime();
+					break;
+				case 'help':
+					response = 'Available commands: time, help, exit';
+					break;
+				case 'exit':
+					response = 'Exiting terminal...';
+					window.location.href = 'https://www.google.com';
+					break;
+				default:
+					response = 'Invalid command. Type "help" for help.';
+					break;
+			}
+
+			output.innerHTML += getPrompt() + command + '<br>';
+			output.innerHTML += response + '<br>';
+			output.scrollTop = output.scrollHeight;
+		}
+
+		function getTime() {
 			var date = new Date();
 			var hours = date.getHours();
-			var minutes = date.getMinutes().toString().padStart(2, '0');
-			var seconds = date.getSeconds().toString().padStart(2, '0');
+			var minutes = date.getMinutes();
+			var seconds = date.getSeconds();
+
 			hours = hours % 12;
 			hours = hours ? hours : 12;
-			var amPm = hours >= 12 ? 'PM' : 'AM';
-			var time = hours + ":" + minutes + ":" + seconds + " " + amPm;
-			document.getElementById('time').innerText = time;
-			setTimeout(showTime, 1000);
+			minutes = minutes < 10 ? '0' + minutes : minutes;
+			seconds = seconds < 10 ? '0' + seconds : seconds;
+
+			return hours + ':' + minutes + ':' + seconds;
+		}
+
+		function getPrompt() {
+			return '<span class="green">$</span> <input type="text" id="input">';
 		}
 	</script>
 </head>
-<body onload="showTime()">
-	<h1>FSOCIETY</h1>
-	<div class="container">
-		<div class="line"></div>
-		<div class="time">
-			<span id="time"></span>
-		</div>
-		<div class="line"></div>
-		<div class="text-container">
-			<span>Mr. Robot</span>
-			<span>"Control is an illusion.</span>
-			<span>Chaos is inevitable."</span>
-		</div>
+<body>
+	<div class="term">
+		<p class="output">Connecting...</p>
+		<p class="output"></p>
+		<p class="output"><span class="white">U@I:</span><span class="green">_</span><span class="white">~/FSOCIETY/terminal/</span></p>
+		<p class="output"></p>
+		<p class="output"></p>
+		<p class="output"><span class="green">$</span> <input type="text" id="input"></p>
 	</div>
 </body>
 </html>
