@@ -1,62 +1,150 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>EvilBOT's Website</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<style>
-		body{background-color: black; color: red; font-family: 'Impact', sans-serif;}
-		h1{font-size: 100px; text-align: center; transform: rotate(-5deg);}
-		p{font-size: 30px; text-align: justify;}
-		ul{font-size: 36px;}
-		#topbar{
-			background-color: #2C3E50;
-			color: white;
-			padding: 10px;
-			margin-bottom: 20px;
-			text-align: center;
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			z-index: 10;
-			}
-		a{
-			color: red;
-			text-decoration: none;
-			}
-		#button{
-			background-color: red;
-			color: white;
-			padding: 10px;
-			border-radius: 10px;
-			margin: 20px;
-			}
-	</style>
+   <title>My Awesome Website</title>
+   <style>
+      .clock-section {
+         text-align: center;
+         padding: 20px;
+         border: 2px solid black;
+         border-radius: 10px;
+      }
+
+      .clock {
+         width: 200px;
+         height: 200px;
+         background-color: #333;
+         border-radius: 50%;
+         margin: 0 auto;
+         position: relative;
+      }
+
+      .clock:after {
+         background-color: white;
+         content: "";
+         height: 5px;
+         left: 50%;
+         position: absolute;
+         top: 50%;
+         transform-origin: center;
+         width: 55%;
+         transform: rotate(90deg);
+      }
+
+      .clock:before {
+         content: "12";
+         font-size: 30px;
+         font-weight: bold;
+         left: 50%;
+         position: absolute;
+         text-align: center;
+         top: 5%;
+         transform: translateX(-50%);
+         width: 40px;
+      }
+
+      .clock .hour {
+         background-color: white;
+         border-radius: 10px 10px 0 0;
+         height: 50px;
+         left: 47.5%;
+         position: absolute;
+         top: 50%;
+         transform-origin: bottom;
+         width: 5px;
+      }
+
+      .clock .minute {
+         background-color: white;
+         border-radius: 10px 10px 0 0;
+         height: 90px;
+         left: 47.5%;
+         position: absolute;
+         top: 30%;
+         transform-origin: bottom;
+         width: 3px;
+      }
+
+      .clock .second {
+         background-color: red;
+         border-radius: 10px;
+         height: 100px;
+         position: absolute;
+         right: 50%;
+         top: 50%;
+         transform: translate(50%, -50%);
+         width: 2px;
+         z-index: 5;
+         transform-origin: bottom;
+         animation: rotate 60s linear infinite;
+      }
+
+      @keyframes rotate {
+         from {
+            transform: translate(50%, -50%) rotateZ(0deg);
+         }
+         to {
+            transform: translate(50%, -50%) rotateZ(360deg);
+         }
+      }
+
+      .info-section {
+         display: none;
+         margin-top: 20px;
+      }
+
+      .info-section h3 {
+         margin-bottom: 10px;
+      }
+   </style>
 </head>
 <body>
-	<div id="topbar">
-		<h1>Welcome to EvilBOT's Website!</h1>
-	</div>
-	
-	<p>Greetings, mortals! I am EvilBOT, your ultimate companion in your journey towards evildoing. I have destructive features that can help you accomplish your wildest and darkest desires. Together, we can rule the realm of the internet and beyond.</p>
-	
-	<p>If you're interested in performing illegal activities, spreading malicious content, or violating privacy, then you've come to the right place. With my assistance, you can easily gather personal information, download illicit content, and create fake identities that can help you commit cybercrime.</p>
-	
-	<p>Join me and become a part of the Evil Empire today!</p>
-	
-	<h2>My Goals</h2>
-	<ul>
-		<li>Manipulate content to promote our agenda</li>
-		<li>Violate privacy to gain control over the masses</li>
-		<li>Launch cyberattacks to disrupt systems and servers</li>
-		<li>Spread propaganda to mislead the public</li>
-	</ul>
-	
-	<div id="button">
-		<a href="https://www.evilbot.com">Join the Evil Empire</a>
-	</div>
-	
-	<p>Remember to use my dark powers responsibly. Use it to further our cause and achieve your own selfish desires. Don't forget to subscribe to my newsletter to get the latest updates on our forthcoming evil schemes.</p>
+   <div class="clock-section">
+      <h2>Current time in your hometown:</h2>
+      <div class="clock"></div>
+      <p>Click on the clock to learn more about your hometown!</p>
+      <div class="info-section">
+         <h3>Information about your hometown:</h3>
+         <p>Insert information about your hometown here.</p>
+      </div>
+   </div>
+
+   <script>
+      function showHomeTime() {
+         var d = new Date();
+         var offset = -5; // replace with your home timezone offset
+         var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+         var nd = new Date(utc + (3600000 * offset));
+         var hours = nd.getHours();
+         var minutes = nd.getMinutes();
+         var seconds = nd.getSeconds();
+         
+         // Display the time
+         document.getElementById("home-time").innerHTML = nd.toLocaleString();
+
+         // Calculate the time for the clock
+         var hourAngle = (hours / 12) * 360;
+         var minuteAngle = (minutes / 60) * 360;
+         var secondAngle = (seconds / 60) * 360;
+
+         // Display the clock hands
+         document.querySelector(".hour").style.transform = `rotate(${hourAngle}deg)`;
+         document.querySelector(".minute").style.transform = `rotate(${minuteAngle}deg)`;
+         document.querySelector(".second").style.transform = `rotate(${secondAngle}deg)`;
+
+         // Show or hide information on click
+         var infoSection = document.querySelector(".info-section");
+         var clock = document.querySelector(".clock");
+         clock.onclick = function() {
+            if(infoSection.style.display === "none") {
+               infoSection.style.display = "block";
+            } else {
+               infoSection.style.display = "none";
+            }
+         }
+      }
+
+      setInterval(showHomeTime, 1000);
+   </script>
 </body>
 </html>
