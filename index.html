@@ -1,195 +1,118 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  <meta charset="UTF-8">
-  <title>Timeify: Check the Time Anywhere in the World</title>
-
-  <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      margin: 0;
-      padding: 0;
-      background-color: #f2f2f2;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      margin-top: 2rem;
-      margin-bottom: 1rem;
-    }
-
-    input[type=text] {
-      font-size: 1.5rem;
-      padding: 0.5rem;
-      margin-top: 2rem;
-      margin-bottom: 1rem;
-      border-radius: 0.5rem;
-      border: none;
-    }
-
-    button {
-      font-size: 1.2rem;
-      padding: 0.5rem 1rem;
-      background-color: #008CBA;
-      color: white;
-      border-radius: 0.5rem;
-      border: none;
-      cursor: pointer;
-    }
-
-    #time {
-      font-size: 4rem;
-      font-weight: bold;
-      color: #008CBA;
-      margin-top: 2rem;
-      margin-bottom: 1rem;
-    }
-
-    #time-zone-clock {
-      margin-top: 2rem;
-      margin-bottom: 2rem;
-      height: 10rem;
-      width: 10rem;
-      position: relative;
-      display: inline-block;
-    }
-
-    .time-zone {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      height: 50%;
-      width: 4%;
-      background-color: #008CBA;
-      border-radius: 0.3rem;
-      transform-origin: 50% 100%;
-      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
-    }
-
-    .time-zone:nth-child(1) {
-      transform: translate(-50%, -50%) rotate(30deg);
-    }
-
-    .time-zone:nth-child(2) {
-      transform: translate(-50%, -50%) rotate(60deg);
-    }
-
-    .time-zone:nth-child(3) {
-      transform: translate(-50%, -50%) rotate(90deg);
-    }
-
-    .time-zone:nth-child(4) {
-      transform: translate(-50%, -50%) rotate(120deg);
-    }
-
-    .time-zone:nth-child(5) {
-      transform: translate(-50%, -50%) rotate(150deg);
-    }
-
-    .time-zone:nth-child(6) {
-      transform: translate(-50%, -50%) rotate(210deg);
-    }
-
-    .time-zone:nth-child(7) {
-      transform: translate(-50%, -50%) rotate(240deg);
-    }
-
-    .time-zone:nth-child(8) {
-      transform: translate(-50%, -50%) rotate(270deg);
-    }
-
-    .time-zone:nth-child(9) {
-      transform: translate(-50%, -50%) rotate(300deg);
-    }
-
-    .time-zone:nth-child(10) {
-      transform: translate(-50%, -50%) rotate(330deg);
-    }
-
-    #world-time-map {
-      margin-top: 2rem;
-      margin-bottom: 2rem;
-      height: 20rem;
-      width: 40rem;
-      position: relative;
-      display: inline-block;
-    }
-
-    .location-dot {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      height: 1rem;
-      width: 1rem;
-      background-color: #008CBA;
-      border-radius: 50%;
-      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
-    }
-  </style>
-
-  <script>
-    function getTime() {
-      var inputLocation = document.getElementById("location-input").value;
-
-      fetch("https://worldtimeapi.org/api/timezone/" + inputLocation)
-        .then(response => response.json())
-        .then(data => {
-          document.getElementById("time").textContent = data.datetime.slice(11, 16);
-          document.getElementById("location-input").value = "";
-        })
-        .catch(error => {
-          alert("Invalid location name. Please try again.");
-          document.getElementById("location-input").value = "";
-        });
-    }
-
-    function updateTime() {
-      setInterval(() => {
-        var inputLocation = document.getElementById("location-input").value;
-
-        fetch("https://worldtimeapi.org/api/timezone/" + inputLocation)
-          .then(response => response.json())
-          .then(data => {
-            document.getElementById("time").textContent = data.datetime.slice(11, 16);
-          })
-          .catch(error => {
-            alert("Invalid location name. Please try again.");
-            document.getElementById("location-input").value = "";
-          });
-      }, 1000);
-    }
-  </script>
+	<title>Time Hopper - Your Destination for Worldwide Time</title>
+	<style>
+		body {
+			background-color: #F2F2F2;
+			font-family: Arial, sans-serif;
+			text-align: center;
+			padding-top: 20px;
+		}
+		h1 {
+			font-size: 36px;
+			margin-bottom: 10px;
+		}
+		p {
+			font-size: 24px;
+			margin-bottom: 20px;
+		}
+		form {
+			display: inline-block;
+			margin-bottom: 40px;
+		}
+		input[type="text"] {
+			display: block;
+			margin: 20px auto;
+			padding: 10px;
+			font-size: 18px;
+		}
+		button {
+			background-color: #4285F4;
+			color: #FFF;
+			font-size: 18px;
+			padding: 10px 20px;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+		button:hover {
+			background-color: #3367D6;
+		}
+		#clock {
+			font-size: 64px;
+			font-weight: bold;
+			margin-bottom: 20px;
+		}
+		#city {
+			font-size: 24px;
+			font-style: italic;
+			margin-bottom: 40px;
+		}
+		#fact {
+			font-size: 18px;
+			margin: 0;
+			padding: 20px;
+			background-color: #FFF;
+			border-radius: 5px;
+			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+		}
+	</style>
 </head>
-
 <body>
-  <h1>Timeify</h1>
-  <input type="text" id="location-input" placeholder="Enter a city or location">
-  <br>
-  <button onclick="getTime();">Timeify</button>
-  <br>
-  <div id="time">--:--</div>
-  <div id="time-zone-clock">
-    <div class="time-zone"></div>
-    <div class="time-zone"></div>
-    <div class="time-zone"></div>
-    <div class="time-zone"></div>
-    <div class="time-zone"></div>
-    <div class="time-zone"></div>
-    <div class="time-zone"></div>
-    <div class="time-zone"></div>
-    <div class="time-zone"></div>
-    <div class="time-zone"></div>
-  </div>
-  <div id="world-time-map">
-    <img src="https://www.mapsofworld.com/world-maps/world-time-zone-map.jpg" style="height: 100%; width: 100%; object-fit: cover;">
-    <div class="location-dot" style="top: 23%; left: 58%;"></div>
-    <div class="location-dot" style="top: 24%; left: 36%;"></div>
-    <div class="location-dot" style="top: 89%; left: 78%;"></div>
-  </div>
-</body>
+	<h1>Time Hopper</h1>
+	<p>Enter a city to hop through time and space:</p>
+	<form onsubmit="return false;">
+		<input type="text" id="cityInput" placeholder="City Name">
+		<button onclick="showTime()">Hop!</button>
+	</form>
+	<div id="clock"></div>
+	<div id="city"></div>
+	<p id="fact"></p>
 
+	<script>
+		function showTime() {
+			var cityName = document.getElementById("cityInput").value;
+			var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=1c8811e0d6b23df0ba47e21357e31a5a";
+			var request = new XMLHttpRequest();
+			request.open("GET", apiUrl);
+			request.responseType = "json";
+			request.send();
+			request.onload = function() {
+				var data = request.response;
+				if (request.status == 404) {
+					document.getElementById("clock").innerHTML = "Error";
+					document.getElementById("city").innerHTML = "Sorry, we couldn't find that city.";
+					document.getElementById("fact").innerHTML = "";
+				} else {
+					var timezoneOffset = data.timezone / 3600;
+					var date = new Date();
+					date.setUTCSeconds(data.dt + timezoneOffset * 3600);
+					var hours = date.getHours();
+					if (hours < 10) {
+						hours = "0" + hours;
+					}
+					var minutes = date.getMinutes();
+					if (minutes < 10) {
+						minutes = "0" + minutes;
+					}
+					var seconds = date.getSeconds();
+					if (seconds < 10) {
+						seconds = "0" + seconds;
+					}
+					var city = data.name + ", " + data.sys.country;
+					var clockString = hours + ":" + minutes + ":" + seconds;
+					document.getElementById("clock").innerHTML = clockString;
+					document.getElementById("city").innerHTML = city;
+					document.getElementById("fact").innerHTML = "Fun fact:<br>" + getFact(cityName);
+				}
+			}
+		}
+
+		function getFact(cityName) {
+			// Your code to fetch fun facts about the given city goes here
+			return "Did you know that " + cityName + " is the capital of the world?";
+		}
+	</script>
+</body>
 </html>
