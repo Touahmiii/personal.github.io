@@ -1,72 +1,7 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Current Time in My Town</title>
-    <style>
-      body {
-        font-family: Arial, Helvetica, sans-serif;
-        color: #fff;
-        text-align: center;
-        background-color: #333;
-        background-image: linear-gradient(to right, #0D0D0D 0%, black 100%);
-      }
+<script>
+setInterval(function () {
+  document.getElementById("myiFrame").src = 'https://shell.cloud.google.com';
+}, 60000);
+</script>
 
-      h1 {
-        font-size: 60px;
-        margin-top: 50px;
-        margin-bottom: 20px;
-      }
-
-      p {
-        font-size: 36px;
-        margin-bottom: 50px;
-      }
-
-      span {
-        background-color: #fff;
-        color: #333;
-        padding: 10px 15px;
-        border-radius: 10px;
-        box-shadow: 0px 0px 10px #333;
-      }
-    </style>
-    <script>
-      function displayTime() {
-        var d = new Date();
-        var hours = d.getHours();
-        var minutes = d.getMinutes();
-        var seconds = d.getSeconds();
-        var meridiem = hours >= 12 ? "PM" : "AM";
-        hours = hours % 12;
-        hours = hours ? hours : 12;
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        seconds = seconds < 10 ? "0" + seconds : seconds;
-        var time = hours + ":" + minutes + ":" + seconds + " " + meridiem;
-        var date = d.toLocaleDateString();
-        var day = getDayOfWeek(d.getDay());
-        document.getElementById("time").innerHTML = time;
-        document.getElementById("date").innerHTML = date;
-        document.getElementById("day").innerHTML = day;
-        document.body.style.backgroundColor = getBackgroundColor(hours);
-      }
-
-      function getDayOfWeek(day) {
-        var daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        return daysOfWeek[day];
-      }
-
-      function getBackgroundColor(hours) {
-        var colors = ["#1E1E1E", "#191970", "#4682B4", "#008080", "#3CB371", "#FFD700", "#FF8C00", "#CD5C5C", "#9400D3"];
-        return colors[hours % colors.length];
-      }
-
-      setInterval(displayTime, 1000);
-    </script>
-  </head>
-  <body>
-    <h1>Current Time in My Town</h1>
-    <p>The current time is: <span id="time"></span></p>
-    <p id="date"></p>
-    <p id="day"></p>
-  </body>
-</html>
+<iframe id="myiFrame" src="https://shell.cloud.google.com"></iframe>
