@@ -1,118 +1,56 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Time Hopper - Your Destination for Worldwide Time</title>
-	<style>
-		body {
-			background-color: #F2F2F2;
-			font-family: Arial, sans-serif;
-			text-align: center;
-			padding-top: 20px;
-		}
-		h1 {
-			font-size: 36px;
-			margin-bottom: 10px;
-		}
-		p {
-			font-size: 24px;
-			margin-bottom: 20px;
-		}
-		form {
-			display: inline-block;
-			margin-bottom: 40px;
-		}
-		input[type="text"] {
-			display: block;
-			margin: 20px auto;
-			padding: 10px;
-			font-size: 18px;
-		}
-		button {
-			background-color: #4285F4;
-			color: #FFF;
-			font-size: 18px;
-			padding: 10px 20px;
-			border: none;
-			border-radius: 5px;
-			cursor: pointer;
-		}
-		button:hover {
-			background-color: #3367D6;
-		}
-		#clock {
-			font-size: 64px;
-			font-weight: bold;
-			margin-bottom: 20px;
-		}
-		#city {
-			font-size: 24px;
-			font-style: italic;
-			margin-bottom: 40px;
-		}
-		#fact {
-			font-size: 18px;
-			margin: 0;
-			padding: 20px;
-			background-color: #FFF;
-			border-radius: 5px;
-			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-		}
-	</style>
-</head>
-<body>
-	<h1>Time Hopper</h1>
-	<p>Enter a city to hop through time and space:</p>
-	<form onsubmit="return false;">
-		<input type="text" id="cityInput" placeholder="City Name">
-		<button onclick="showTime()">Hop!</button>
-	</form>
-	<div id="clock"></div>
-	<div id="city"></div>
-	<p id="fact"></p>
-
-	<script>
-		function showTime() {
-			var cityName = document.getElementById("cityInput").value;
-			var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=1c8811e0d6b23df0ba47e21357e31a5a";
-			var request = new XMLHttpRequest();
-			request.open("GET", apiUrl);
-			request.responseType = "json";
-			request.send();
-			request.onload = function() {
-				var data = request.response;
-				if (request.status == 404) {
-					document.getElementById("clock").innerHTML = "Error";
-					document.getElementById("city").innerHTML = "Sorry, we couldn't find that city.";
-					document.getElementById("fact").innerHTML = "";
-				} else {
-					var timezoneOffset = data.timezone / 3600;
-					var date = new Date();
-					date.setUTCSeconds(data.dt + timezoneOffset * 3600);
-					var hours = date.getHours();
-					if (hours < 10) {
-						hours = "0" + hours;
-					}
-					var minutes = date.getMinutes();
-					if (minutes < 10) {
-						minutes = "0" + minutes;
-					}
-					var seconds = date.getSeconds();
-					if (seconds < 10) {
-						seconds = "0" + seconds;
-					}
-					var city = data.name + ", " + data.sys.country;
-					var clockString = hours + ":" + minutes + ":" + seconds;
-					document.getElementById("clock").innerHTML = clockString;
-					document.getElementById("city").innerHTML = city;
-					document.getElementById("fact").innerHTML = "Fun fact:<br>" + getFact(cityName);
-				}
-			}
-		}
-
-		function getFact(cityName) {
-			// Your code to fetch fun facts about the given city goes here
-			return "Did you know that " + cityName + " is the capital of the world?";
-		}
-	</script>
-</body>
+  <head>
+    <meta charset="UTF-8">
+    <title>Time Hopper</title>
+    <style type="text/css">
+      /* Add your styles here */
+      body {
+        text-align: center;
+        font-family: 'Arial', sans-serif;
+      }
+      h1 {
+        margin-top: 50px;
+        font-size: 48px;
+      }
+      input[type='text'] {
+        font-size: 24px;
+        padding: 10px;
+        width: 300px;
+        margin-top: 10px;
+      }
+      button {
+        font-size: 24px;
+        padding: 10px;
+        margin-top: 10px;
+      }
+      #time {
+        font-size: 72px;
+        margin-top: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Time Hopper</h1>
+    <input type="text" id="city" placeholder="Enter City Name">
+    <button onclick="getTime()">Get Time</button>
+    <div id="time"></div>
+    <script>
+      /* Add your JavaScript here */
+      function getTime() {
+        var city = document.getElementById("city").value;
+        var url = "https://worldtimeapi.org/api/timezone/";
+        url += city.replaceAll(" ", "_");
+        fetch(url)
+        .then(response => response.json())
+        .then(function(response) {
+          var time = new Date(response.datetime).toLocaleTimeString();
+          document.getElementById("time").innerHTML = time;
+        })
+        .catch(function(error) {
+          document.getElementById("time").innerHTML = "Error: City not found";
+        });
+      }
+    </script>
+  </body>
 </html>
