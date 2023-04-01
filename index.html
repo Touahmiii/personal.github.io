@@ -1,27 +1,88 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Local Time</title>
-	<script>
-	function showTime() {
-		var date = new Date();
-		var hours = date.getHours();
-		var minutes = date.getMinutes();
-		var seconds = date.getSeconds();
-		var amOrPm = hours >= 12 ? 'PM' : 'AM';
-		hours = hours % 12;
-		hours = hours ? hours : 12;
-		minutes = minutes < 10 ? '0' + minutes : minutes;
-		seconds = seconds < 10 ? '0' + seconds : seconds;
-		var time = hours + ':' + minutes + ':' + seconds + ' ' + amOrPm;
-		document.getElementById('clock').innerText = time;
-		setTimeout(showTime, 1000);
+	<title>FSociety Time</title>
+	<style>
+	body {
+		background-color: black;
+		color: lime;
+		font-family: monospace;
+		margin: 0;
+		padding: 0;
 	}
+	h1 {
+		font-size: 5rem;
+		margin-top: 5rem;
+		text-align: center;
+        text-shadow: 0 0 50px lime;
+	}
+	.container {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		height: calc(100vh - 150px);
+	}
+	.clock {
+		position: relative;
+		color: lime;
+		font-size: 10rem;
+		margin: 0 1rem;
+		text-shadow: 0 0 50px lime;
+	}
+	.line {
+		position: absolute;
+		height: 100%;
+		border-left: 2px dashed lime;
+	}
+	.text-container {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		font-size: 3rem;
+		text-align: center;
+		margin: 0 2rem;
+	}
+	.text-container span {
+		margin-bottom: 1rem;
+	}
+	</style>
+	<script>
+		function showTime() {
+			var date = new Date();
+			var hours = date.getHours();
+			var minutes = date.getMinutes();
+			var seconds = date.getSeconds();
+			hours = hours % 12;
+			hours = hours ? hours : 12;
+			minutes = minutes < 10 ? '0' + minutes : minutes;
+			seconds = seconds < 10 ? '0' + seconds : seconds;
+			var time = hours + ':' + minutes + ':' + seconds;
+			document.getElementById('hour').innerText = hours;
+			document.getElementById('minute').innerText = minutes;
+			document.getElementById('second').innerText = seconds;
+			setTimeout(showTime, 1000);
+		}
 	</script>
 </head>
 <body onload="showTime()">
-	<h1>Local Time</h1>
-	<p>The current time in your region is:</p>
-	<div id="clock"></div>
+	<h1>FSOCIETY</h1>
+	<div class="container">
+		<div class="line"></div>
+		<div class="clock">
+			<span id="hour"></span>
+			<span>:</span>
+			<span id="minute"></span>
+			<span>:</span>
+			<span id="second"></span>
+		</div>
+		<div class="line"></div>
+		<div class="text-container">
+			<span>Mr. Robot</span>
+			<span>"Control is an illusion.</span>
+			<span>Chaos is inevitable."</span>
+		</div>
+	</div>
 </body>
 </html>
