@@ -1,56 +1,52 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Time Hopper</title>
-    <style type="text/css">
-      /* Add your styles here */
-      body {
-        text-align: center;
-        font-family: 'Arial', sans-serif;
-      }
-      h1 {
-        margin-top: 50px;
-        font-size: 48px;
-      }
-      input[type='text'] {
-        font-size: 24px;
-        padding: 10px;
-        width: 300px;
-        margin-top: 10px;
-      }
-      button {
-        font-size: 24px;
-        padding: 10px;
-        margin-top: 10px;
-      }
-      #time {
-        font-size: 72px;
-        margin-top: 50px;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Time Hopper</h1>
-    <input type="text" id="city" placeholder="Enter City Name">
-    <button onclick="getTime()">Get Time</button>
-    <div id="time"></div>
-    <script>
-      /* Add your JavaScript here */
-      function getTime() {
-        var city = document.getElementById("city").value;
-        var url = "https://worldtimeapi.org/api/timezone/";
-        url += city.replaceAll(" ", "_");
-        fetch(url)
-        .then(response => response.json())
-        .then(function(response) {
-          var time = new Date(response.datetime).toLocaleTimeString();
-          document.getElementById("time").innerHTML = time;
-        })
-        .catch(function(error) {
-          document.getElementById("time").innerHTML = "Error: City not found";
-        });
-      }
-    </script>
-  </body>
+<head>
+	<title>Local Time - JavaScript Website</title>
+	<style>
+		body {
+			background-color: #f2f2f2;
+			font-family: Arial, sans-serif;
+		}
+		h1 {
+			font-size: 36px;
+			text-align: center;
+			margin-top: 50px;
+			margin-bottom: 20px;
+		}
+		#clock {
+			font-size: 72px;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<h1>Local Time</h1>
+	<div id="clock"></div>
+
+	<script>
+		function updateTime() {
+			var now = new Date();
+			var hour = now.getHours();
+			var minute = now.getMinutes();
+			var second = now.getSeconds();
+
+			if (hour < 10) {
+				hour = "0" + hour;
+			}
+
+			if (minute < 10) {
+				minute = "0" + minute;
+			}
+
+			if (second < 10) {
+				second = "0" + second;
+			}
+
+			var timeString = hour + ":" + minute + ":" + second;
+			document.getElementById("clock").innerHTML = timeString;
+		}
+
+		setInterval(updateTime, 1000); // update time every 1 second
+	</script>
+</body>
 </html>
