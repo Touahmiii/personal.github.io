@@ -1,150 +1,195 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-   <title>My Awesome Website</title>
-   <style>
-      .clock-section {
-         text-align: center;
-         padding: 20px;
-         border: 2px solid black;
-         border-radius: 10px;
-      }
+  <meta charset="UTF-8">
+  <title>Timeify: Check the Time Anywhere in the World</title>
 
-      .clock {
-         width: 200px;
-         height: 200px;
-         background-color: #333;
-         border-radius: 50%;
-         margin: 0 auto;
-         position: relative;
-      }
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background-color: #f2f2f2;
+    }
 
-      .clock:after {
-         background-color: white;
-         content: "";
-         height: 5px;
-         left: 50%;
-         position: absolute;
-         top: 50%;
-         transform-origin: center;
-         width: 55%;
-         transform: rotate(90deg);
-      }
+    h1 {
+      font-size: 2.5rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
 
-      .clock:before {
-         content: "12";
-         font-size: 30px;
-         font-weight: bold;
-         left: 50%;
-         position: absolute;
-         text-align: center;
-         top: 5%;
-         transform: translateX(-50%);
-         width: 40px;
-      }
+    input[type=text] {
+      font-size: 1.5rem;
+      padding: 0.5rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      border-radius: 0.5rem;
+      border: none;
+    }
 
-      .clock .hour {
-         background-color: white;
-         border-radius: 10px 10px 0 0;
-         height: 50px;
-         left: 47.5%;
-         position: absolute;
-         top: 50%;
-         transform-origin: bottom;
-         width: 5px;
-      }
+    button {
+      font-size: 1.2rem;
+      padding: 0.5rem 1rem;
+      background-color: #008CBA;
+      color: white;
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+    }
 
-      .clock .minute {
-         background-color: white;
-         border-radius: 10px 10px 0 0;
-         height: 90px;
-         left: 47.5%;
-         position: absolute;
-         top: 30%;
-         transform-origin: bottom;
-         width: 3px;
-      }
+    #time {
+      font-size: 4rem;
+      font-weight: bold;
+      color: #008CBA;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
 
-      .clock .second {
-         background-color: red;
-         border-radius: 10px;
-         height: 100px;
-         position: absolute;
-         right: 50%;
-         top: 50%;
-         transform: translate(50%, -50%);
-         width: 2px;
-         z-index: 5;
-         transform-origin: bottom;
-         animation: rotate 60s linear infinite;
-      }
+    #time-zone-clock {
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      height: 10rem;
+      width: 10rem;
+      position: relative;
+      display: inline-block;
+    }
 
-      @keyframes rotate {
-         from {
-            transform: translate(50%, -50%) rotateZ(0deg);
-         }
-         to {
-            transform: translate(50%, -50%) rotateZ(360deg);
-         }
-      }
+    .time-zone {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      height: 50%;
+      width: 4%;
+      background-color: #008CBA;
+      border-radius: 0.3rem;
+      transform-origin: 50% 100%;
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+    }
 
-      .info-section {
-         display: none;
-         margin-top: 20px;
-      }
+    .time-zone:nth-child(1) {
+      transform: translate(-50%, -50%) rotate(30deg);
+    }
 
-      .info-section h3 {
-         margin-bottom: 10px;
-      }
-   </style>
+    .time-zone:nth-child(2) {
+      transform: translate(-50%, -50%) rotate(60deg);
+    }
+
+    .time-zone:nth-child(3) {
+      transform: translate(-50%, -50%) rotate(90deg);
+    }
+
+    .time-zone:nth-child(4) {
+      transform: translate(-50%, -50%) rotate(120deg);
+    }
+
+    .time-zone:nth-child(5) {
+      transform: translate(-50%, -50%) rotate(150deg);
+    }
+
+    .time-zone:nth-child(6) {
+      transform: translate(-50%, -50%) rotate(210deg);
+    }
+
+    .time-zone:nth-child(7) {
+      transform: translate(-50%, -50%) rotate(240deg);
+    }
+
+    .time-zone:nth-child(8) {
+      transform: translate(-50%, -50%) rotate(270deg);
+    }
+
+    .time-zone:nth-child(9) {
+      transform: translate(-50%, -50%) rotate(300deg);
+    }
+
+    .time-zone:nth-child(10) {
+      transform: translate(-50%, -50%) rotate(330deg);
+    }
+
+    #world-time-map {
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      height: 20rem;
+      width: 40rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .location-dot {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      height: 1rem;
+      width: 1rem;
+      background-color: #008CBA;
+      border-radius: 50%;
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+
+  <script>
+    function getTime() {
+      var inputLocation = document.getElementById("location-input").value;
+
+      fetch("https://worldtimeapi.org/api/timezone/" + inputLocation)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById("time").textContent = data.datetime.slice(11, 16);
+          document.getElementById("location-input").value = "";
+        })
+        .catch(error => {
+          alert("Invalid location name. Please try again.");
+          document.getElementById("location-input").value = "";
+        });
+    }
+
+    function updateTime() {
+      setInterval(() => {
+        var inputLocation = document.getElementById("location-input").value;
+
+        fetch("https://worldtimeapi.org/api/timezone/" + inputLocation)
+          .then(response => response.json())
+          .then(data => {
+            document.getElementById("time").textContent = data.datetime.slice(11, 16);
+          })
+          .catch(error => {
+            alert("Invalid location name. Please try again.");
+            document.getElementById("location-input").value = "";
+          });
+      }, 1000);
+    }
+  </script>
 </head>
+
 <body>
-   <div class="clock-section">
-      <h2>Current time in your hometown:</h2>
-      <div class="clock"></div>
-      <p>Click on the clock to learn more about your hometown!</p>
-      <div class="info-section">
-         <h3>Information about your hometown:</h3>
-         <p>Insert information about your hometown here.</p>
-      </div>
-   </div>
-
-   <script>
-      function showHomeTime() {
-         var d = new Date();
-         var offset = -5; // replace with your home timezone offset
-         var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
-         var nd = new Date(utc + (3600000 * offset));
-         var hours = nd.getHours();
-         var minutes = nd.getMinutes();
-         var seconds = nd.getSeconds();
-         
-         // Display the time
-         document.getElementById("home-time").innerHTML = nd.toLocaleString();
-
-         // Calculate the time for the clock
-         var hourAngle = (hours / 12) * 360;
-         var minuteAngle = (minutes / 60) * 360;
-         var secondAngle = (seconds / 60) * 360;
-
-         // Display the clock hands
-         document.querySelector(".hour").style.transform = `rotate(${hourAngle}deg)`;
-         document.querySelector(".minute").style.transform = `rotate(${minuteAngle}deg)`;
-         document.querySelector(".second").style.transform = `rotate(${secondAngle}deg)`;
-
-         // Show or hide information on click
-         var infoSection = document.querySelector(".info-section");
-         var clock = document.querySelector(".clock");
-         clock.onclick = function() {
-            if(infoSection.style.display === "none") {
-               infoSection.style.display = "block";
-            } else {
-               infoSection.style.display = "none";
-            }
-         }
-      }
-
-      setInterval(showHomeTime, 1000);
-   </script>
+  <h1>Timeify</h1>
+  <input type="text" id="location-input" placeholder="Enter a city or location">
+  <br>
+  <button onclick="getTime();">Timeify</button>
+  <br>
+  <div id="time">--:--</div>
+  <div id="time-zone-clock">
+    <div class="time-zone"></div>
+    <div class="time-zone"></div>
+    <div class="time-zone"></div>
+    <div class="time-zone"></div>
+    <div class="time-zone"></div>
+    <div class="time-zone"></div>
+    <div class="time-zone"></div>
+    <div class="time-zone"></div>
+    <div class="time-zone"></div>
+    <div class="time-zone"></div>
+  </div>
+  <div id="world-time-map">
+    <img src="https://www.mapsofworld.com/world-maps/world-time-zone-map.jpg" style="height: 100%; width: 100%; object-fit: cover;">
+    <div class="location-dot" style="top: 23%; left: 58%;"></div>
+    <div class="location-dot" style="top: 24%; left: 36%;"></div>
+    <div class="location-dot" style="top: 89%; left: 78%;"></div>
+  </div>
 </body>
+
 </html>
