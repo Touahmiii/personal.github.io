@@ -40,11 +40,33 @@
 			transform: rotate(-10deg);
 			white-space: nowrap;
 		}
+		#background {
+			position: fixed;
+			top: 0;
+			left: 0;
+			height: 100%;
+			width: 100%;
+			background-image: url(https://raw.githubusercontent.com/microsoft/TypeScript-Website/master/public/images/icons/icon-192x192.png);
+			background-repeat: no-repeat;
+			background-size: 20%;
+			opacity: 0.1;
+			z-index: -1;
+			animation: background 60s linear infinite;
+		}
+		@keyframes background {
+			from {
+				transform: rotate(0deg) scale(1);
+			}
+			to {
+				transform: rotate(360deg) scale(1.2);
+			}
+		}
 	</style>
 </head>
 <body>
 	<h1>Mr. Robot</h1>
 	<div id="clock"></div>
+	<div id="background"></div>
 
 	<script>
 		function updateTime() {
