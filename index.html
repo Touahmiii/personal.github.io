@@ -8,6 +8,16 @@
       color: #00FF00;
       font-family: monospace;
       font-size: 24px;
+      margin: 0;
+      padding: 0;
+    }
+
+    ::-webkit-scrollbar {
+      width: 0.4em;
+    }
+ 
+    ::-webkit-scrollbar-thumb {
+      background-color: #000;
     }
 
     .prompt {
@@ -15,26 +25,50 @@
       width: 2.5em;
     }
 
-    .wrapper {
-      border: 2px solid red;
-      padding: 1em;
-    }
-
     #terminal {
       height: 500px;
       overflow-y: scroll;
+      padding-right: 0.5em;
+    }
+
+    input[type="text"] {
+      background-color: transparent;
+      border: none;
+      font-family: monospace;
+      font-size: 24px;
+      width: 90%;
+      outline: none;
+      color: #00FF00;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+    }
+
+    ::-webkit-input-placeholder {
+      color: #666;
+    }
+
+    :-moz-placeholder {
+      color: #666;
+    }
+
+    ::-moz-placeholder {
+      color: #666;
+    }
+
+    :-ms-input-placeholder {
+      color: #666;
     }
   </style>
 </head>
 <body>
-  <div class="wrapper">
-    <div id="terminal">
-      <p><span class="prompt">⏰</span>Current Time: <span id="time"></span></p>
-    </div>
-    <form>
-      <span class="prompt">$</span> <input type="text" id="command">
-    </form>
+  <div id="terminal">
+    <p><span class="prompt">⏰</span>Current Time: <span id="time"></span></p>
   </div>
+  <form>
+    <input type="text" id="command" placeholder="Type in a command" autocomplete="off">
+  </form>
   <script>
     function getTime() {
       var today = new Date();
