@@ -6,109 +6,105 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<style type="text/css">
 		body {
+			padding: 0;
+			margin: 0;
 			background-color: black;
 			color: green;
 			font-family: 'Courier New', monospace;
 			font-size: 30px;
 			text-align: center;
 		}
-		h1{
-	        font-size: 50px;
-    	}
-  		.terminal{
-   			width: 95%;
-   			height: 70vh;
-   			margin: 30px auto;
-   			padding: 10px;
-   			overflow: auto;
-   			background-color: black;
-    		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-  		}
-  		.terminal .input-line{
-   			color: green;
-   			display: block;
-   			margin-top: 1rem;
-    		position: relative;
-  		}
-  		.terminal .input-line::before{
-   			content: "$";
-   			display: inline-block;
-   			margin-right: 0.5rem;
-  		}
-  		.terminal .input{
-   			position: absolute;
-    		outline: none;
-    		left: 0;
-    		bottom: 0;
-    		padding: 0;
-    		width: 100%;
-    		background-color: transparent;
-    		color: green;
-    		border: none;
-    		margin-right: 0.5rem;
-    		font-size: 30px;
-    		font-family: 'Courier New', monospace;
-  		}
+		#terminal-container {
+			width: 600px;
+			height: 400px;
+			margin: auto;
+			background-color: black;
+			border: 2px solid green;
+			overflow: hidden;
+			position: relative;
+		}
+		#output-container {
+			height: 90%;
+			overflow-y: scroll;
+			padding: 10px;
+			white-space: pre-wrap;
+			word-wrap: break-word;
+			position: relative;
+		}
+		#input-container {
+			height: 10%;
+			background-color: black;
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+			padding-top: 10px;
+			padding-left: 10px;
+			box-sizing:border-box;
+		}
+		#input-box {
+			background-color: transparent;
+			border: none;
+			color: green;
+			font-size: 30px;
+			font-family: 'Courier New', monospace;
+			width: calc(100% - 20px);
+			outline: none;
+		}
+		#input-box:focus::-webkit-input-placeholder {
+  			color: transparent;
+		}
+		#input-box:focus::-moz-placeholder {
+  			color: transparent;
+		}
+		#input-box:focus:-ms-input-placeholder {
+  			color: transparent;
+		}
+		#input-box:focus:-moz-placeholder {
+		  	color: transparent;
+		}		
 	</style>
 </head>
 <body>
-	<h1>MR.ROBOT TERMINAL</h1>
-
-	<div class="terminal">
+	<div id="terminal-container">
+		<div id="output-container"></div>
+		<div id="input-container">
+			<form onsubmit="return handleSubmit(event)">
+				<input type="text" id="input-box" placeholder="Type here...">
+			</form>
+		</div>
 	</div>
-
 	<script>
-        // function to create a new line in the terminal and execute command
-    	function command(input){
-    		let inputLine = document.createElement("div");
-    		inputLine.classList.add("input-line");
-    		inputLine.textContent = `$ ${input}`;
-    		let terminal = document.querySelector(".terminal");
-    		terminal.appendChild(inputLine);
-
-    		// clear previous input
-    		input.value = "";
-
-    		// scroll to the bottom of the terminal after output is rendered
-    		terminal.scrollTop = terminal.scrollHeight;
-    	}
-
-    	// function to execute command when enter key is pressed
-    	function onEnter(event){
-    		if(event.keyCode === 13){
-    			let input = event.target;
-    			command(input.value);
-    		}
-    	}
-
-    	// execute command when enter button is clicked
-    	let input = document.createElement("input");
-    	input.type = "text";
-    	input.classList.add("input");
-    	input.addEventListener("keydown", onEnter);
-    	document.body.appendChild(input);
-
-    	// remove input field from view
-    	input.style.position = "absolute";
-    	input.style.left = "-99999px";
-	</script>
-
-	<script>
-		// function to get local date and time
-		function getTime() {
-			let today = new Date();
-			let dateTime = today.toLocaleString();
-			return dateTime;
+		let outputContainer = document.querySelector('#output-container');
+		let inputBox = document.querySelector('#input-box');
+	
+		// function to display output in the terminal
+		function displayOutput(output) {
+			outputContainer.innerHTML += output + '\n';
+			outputContainer.scrollTop = outputContainer.scrollHeight;
+			inputBox.value = '';
 		}
 
-		// create a command to display local date and time
-		let dateCommand = document.createElement("div");
-		dateCommand.textContent = getTime();
-		let terminal = document.querySelector(".terminal");
-		terminal.appendChild(dateCommand);
+		// function to handle input form submission
+		function handleSubmit(event) {
+			event.preventDefault();
+			let command = inputBox.value.trim();
+			displayOutput('$ ' + command);
+			if (command.toLowerCase() === 'time') {
+				let today = new Date();
+				let date = today.toLocaleDateString();
+				let time = today.toLocaleTimeString();
+				displayOutput(date);
+				displayOutput(time);
+			}
+			else {
+				displayOutput("Error: command not recognized");
+			}		
+		}
 
-		// scroll to the bottom of the terminal after output is rendered
-		terminal.scrollTop = terminal.scrollHeight;
+		// focus the input box on page load
+		window.onload = function() {
+			inputBox.focus();
+		};
 	</script>
 </body>
 </html>
