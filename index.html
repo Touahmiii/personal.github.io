@@ -1,125 +1,52 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Terminal Website</title>
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-        font-family: 'Courier New', Courier, monospace;
-        background-color: black;
-        color: white;
-      }
-      #terminal {
-        height: 80vh;
-        width: 80vw;
-        max-width: 800px;
-        max-height: 600px;
-        margin: auto;
-        margin-top: 10vh;
-        background-color: black;
-        border: 1px solid white;
-        overflow-y: scroll;
-      }
-      .input {
-        color: white;
-      }
-      .output {
-        color: lime;
-      }
-      .command {
-        color: skyblue;
-      }
-      button {
-        background-color: white;
-        color: black;
-        border-radius: 5px;
-        padding: 5px;
-        margin: 5px;
-        font-family: 'Courier New', Courier, monospace;
-        cursor: pointer;
-      }
-      button:hover {
-        background-color: lightgray;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="terminal"></div>
-    <script>
-      function help() {
-        output("Available commands:");
-        output("help - Display a list of available commands and their usage");
-        output("clear - Clear the contents of the terminal screen");
-        output("time - Retrieve and display the local date and time on the terminal screen");
-      }
-
-      function clear() {
-        document.getElementById("terminal").innerHTML = "";
-      }
-
-      function time() {
-        let now = new Date();
-        output(now.toLocaleString());
-      }
-
-      function output(text) {
-        let terminal = document.getElementById("terminal");
-        let outputBox = document.createElement("div");
-        outputBox.classList.add("output");
-        outputBox.innerHTML = text;
-        terminal.appendChild(outputBox);
-        terminal.scrollTop = terminal.scrollHeight;
-      }
-
-      function command(input) {
-        let terminal = document.getElementById("terminal");
-        let inputBox = document.createElement("div");
-        inputBox.classList.add("input");
-        inputBox.innerHTML = ">> " + input;
-        terminal.appendChild(inputBox);
-        terminal.scrollTop = terminal.scrollHeight;
-
-        switch (input) {
-          case "":
-            break;
-          case "help":
-            help();
-            break;
-          case "clear":
-            clear();
-            break;
-          case "time":
-            time();
-            break;
-          default:
-            output("Unrecognized command: " + input);
-        }
-      }
-
-      document.addEventListener("keydown", function (event) {
-        if (event.key === "Enter") {
-          let input = document.getElementById("commandInput").value;
-          command(input);
-          document.getElementById("commandInput").value = "";
-        }
-      });
-
-      document.addEventListener("DOMContentLoaded", function (event) {
-        let terminal = document.getElementById("terminal");
-        let inputBox = document.createElement("div");
-        inputBox.classList.add("input");
-        inputBox.innerHTML = ">>";
-        let input = document.createElement("input");
-        input.setAttribute("type", "text");
-        input.setAttribute("id", "commandInput");
-        inputBox.appendChild(input);
-        terminal.appendChild(inputBox);
-        terminal.scrollTop = terminal.scrollHeight;
-        input.focus();
-      });
-    </script>
-  </body>
+<head>
+	<title>Local Machine Time</title>
+	<style>
+		/* Terminal-inspired font and color scheme */
+		body {
+			font-family: 'Ubuntu Mono', monospace;
+			background-color: black;
+			color: #0F0;
+		}
+		
+		/* Center the content in the middle of the page */
+		.container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			height: 100vh;
+			margin: 0 auto;
+			max-width: 600px;
+		}
+		
+		/* Terminal prompt styling */
+		.prompt {
+			color: #00FF00;
+			font-weight: bold;
+			margin-right: 5px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div id="output"></div>
+	</div>
+		
+	<script>
+		// Execute the "date" command and display the output
+		const outputElement = document.getElementById("output");
+		const command = "date";
+		const xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				const output = this.responseText;
+				outputElement.innerHTML = `<span class="prompt">$</span> ${command} <br>` + output;
+			}
+		};
+		xhr.open("GET", `/cgi-bin/terminal.cgi?cmd=${command}`, true); // Pass the command to a CGI script
+		xhr.send();
+	</script>
+</body>
 </html>
-
