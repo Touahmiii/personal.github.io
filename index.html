@@ -1,56 +1,161 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>Mr. Robot Clock</title>
-<style>
-body {
-background-color: black;
-color: #2ecc71;
-font-size: 2em;
-font-family: monospace;
-}
+  <head>
+    <title>Mr. Robot Clock</title>
+    <style>
+      body {
+        font-family: "Roboto Mono", monospace; /* set custom font */
+        color: #2ecc71;
+        background-color: #111;
+        margin: 0;
+        padding: 0;
+        font-size: 1.5em;
+        transition: all 0.3s ease; /* add transition to all properties */
+      }
 
-#clock {
-position: absolute;
-left: 50%;
-top: 50%;
-transform: translate(-50%, -50%);
-}
+      .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
 
-::selection {
-background-color: #2ecc71;
-color: black;
-}
+      .terminal {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        background-color: #222;
+        border: 1px solid #2ecc71;
+        border-radius: 5px;
+        transition: all 0.3s ease; /* add transition to all properties */
+      }
 
-::-moz-selection {
-background-color: #2ecc71;
-color: black;
-}
-</style>
-</head>
-<body>
-<div id="clock"></div>
+      .terminal-text {
+        margin-right: 10px;
+        font-size: 1em;
+      }
 
-<script>
-function clock() { 
-var d = new Date(); 
-var h = d.getHours(); 
-var m = d.getMinutes(); 
-var s = d.getSeconds(); 
+      .terminal-input {
+        background-color: transparent;
+        border: none;
+        outline: none;
+        color: #2ecc71;
+        font-size: 1em;
+        font-family: inherit;
+        width: 80%;
+      }
 
-if (h < 10) h = '0' + h; 
-if (m < 10) m = '0' + m; 
-if (s < 10) s = '0' + s; 
+      .clock {
+        display: none;
+        font-size: 5em;
+        font-weight: bold;
+        text-align: center;
+        margin: 0;
+        margin-top: 20px;
+        transition: all 0.3s ease; /* add transition to all properties */
+      }
 
-document.getElementById('clock').innerHTML = h + ':' + m + ':' + s; 
-}
+      .quote {
+        display: none;
+        font-size: 1.5em;
+        font-style: italic;
+        text-align: center;
+        margin: 20px;
+        line-height: 1.5;
+        transition: all 0.3s ease; /* add transition to all properties */
+      }
 
-setInterval(clock, 1000); 
-</script>
+      ::selection {
+        background-color: #2ecc71;
+        color: #111;
+      }
 
-<blockquote>
-<p>"The world is a dangerous place Elliot, not because of those who do evil, but because of those who look on and do nothing" - Mr. Robot</p>
-</blockquote>
+      ::-moz-selection {
+        background-color: #2ecc71;
+        color: #111;
+      }
+    </style>
+  </head>
 
-</body>
+  <body>
+    <div class="container">
+      <div class="terminal">
+        <div class="terminal-text">username@mrrobot:~$</div>
+        <input
+          class="terminal-input"
+          type="text"
+          placeholder="Enter a username"
+          autofocus
+        />
+      </div>
+      <h1 class="clock">--:--:--</h1>
+      <p class="quote"></p>
+    </div>
+
+    <script>
+      // Set initial username to null
+      let username = null;
+
+      // Select elements
+      const clockEl = document.querySelector(".clock");
+      const quoteEl = document.querySelector(".quote");
+      const terminalEl = document.querySelector(".terminal");
+      const terminalInputEl = document.querySelector(".terminal-input");
+
+      // Update clock every second
+      setInterval(() => {
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, "0");
+        const minutes = now.getMinutes().toString().padStart(2, "0");
+        const seconds = now.getSeconds().toString().padStart(2, "0");
+
+        clockEl.textContent = `${hours}:${minutes}:${seconds}`;
+      }, 1000);
+
+      // Listen for username input
+      terminalInputEl.addEventListener("keydown", (event) => {
+        // If Enter key is pressed and input is not empty
+        if (event.key === "Enter" && event.target.value.trim() !== "") {
+          // Set username to input value and remove terminal
+          username = event.target.value.trim();
+          terminalEl.style.opacity = 0; /* add opacity transition */
+          terminalEl.style.transform = "translateY(-50%)"; /* add transform transition */
+          setTimeout(() => {
+            terminalEl.remove();
+          }, 500); /* remove element half a second after the transition starts */
+
+          // Show quote with username
+          quoteEl.style.opacity = 0; /* add opacity transition */
+          quoteEl.style.transform = "translateY(10%)"; /* add transform transition */
+          setTimeout(() => {
+            quoteEl.textContent = `"The world is a dangerous place ${username}, not because of those who do evil, but because of those who look on and do nothing" - Mr. Robot`;
+            quoteEl.style.opacity = 1; /* add opacity transition */
+            quoteEl.style.transform = "translateY(0)"; /* add transform transition */
+          }, 500); /* display element half a second after the first transition starts */
+
+          // Show clock and quote
+          setTimeout(() => {
+            clockEl.style.display = "block";
+            quoteEl.style.display = "block";
+            clockEl.style.opacity = 0; /* add opacity transition */
+            quoteEl.style.opacity = 0; /* add opacity transition */
+            clockEl.style.transform = "translateY(-10%)"; /* add transform transition */
+            quoteEl.style.transform = "translateY(10%)"; /* add transform transition */
+            setTimeout(() => {
+              clockEl.style.opacity = 1; /* add opacity transition */
+              quoteEl.style.opacity = 1; /* add opacity transition */
+              clockEl.style.transform = "translateY(0)"; /* add transform transition */
+              quoteEl.style.transform = "translateY(0)"; /* add transform transition */
+            }, 500); /* display element half a second after the second transition starts */
+          }, 1000); /* display elements one second after the user enters their username */
+        }
+      });
+
+      // Set focus on input once page is loaded
+      window.onload = () => {
+        terminalInputEl.focus();
+      };
+    </script>
+  </body>
 </html>
