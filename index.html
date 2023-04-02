@@ -1,52 +1,96 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Local Machine Time</title>
-	<style>
-		/* Terminal-inspired font and color scheme */
-		body {
-			font-family: 'Ubuntu Mono', monospace;
-			background-color: black;
-			color: #0F0;
-		}
-		
-		/* Center the content in the middle of the page */
-		.container {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			height: 100vh;
-			margin: 0 auto;
-			max-width: 600px;
-		}
-		
-		/* Terminal prompt styling */
-		.prompt {
-			color: #00FF00;
-			font-weight: bold;
-			margin-right: 5px;
-		}
-	</style>
+  <title>Mr. Robot Inspired Time Display</title>
+  <style>
+    body {
+      background-color: black;
+      color: #00FF00;
+      font-family: monospace;
+      font-size: 24px;
+    }
+
+    .prompt {
+      display: inline-block;
+      width: 2.5em;
+    }
+
+    .wrapper {
+      border: 2px solid red;
+      padding: 1em;
+    }
+
+    #terminal {
+      height: 500px;
+      overflow-y: scroll;
+    }
+  </style>
 </head>
 <body>
-	<div class="container">
-		<div id="output"></div>
-	</div>
-		
-	<script>
-		// Execute the "date" command and display the output
-		const outputElement = document.getElementById("output");
-		const command = "date";
-		const xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 200) {
-				const output = this.responseText;
-				outputElement.innerHTML = `<span class="prompt">$</span> ${command} <br>` + output;
-			}
-		};
-		xhr.open("GET", `/cgi-bin/terminal.cgi?cmd=${command}`, true); // Pass the command to a CGI script
-		xhr.send();
-	</script>
+  <div class="wrapper">
+    <div id="terminal">
+      <p><span class="prompt">⏰</span>Current Time: <span id="time"></span></p>
+    </div>
+    <form>
+      <span class="prompt">$</span> <input type="text" id="command">
+    </form>
+  </div>
+  <script>
+    function getTime() {
+      var today = new Date();
+      var hours = today.getHours();
+      var minutes = today.getMinutes();
+      var seconds = today.getSeconds();
+      hours = checkTime(hours);
+      minutes = checkTime(minutes);
+      seconds = checkTime(seconds);
+      document.getElementById("time").innerHTML = hours + ":" + minutes + ":" + seconds;
+      var t = setTimeout(getTime, 1000);
+    }
+
+    function checkTime(i) {
+      if (i < 10) {
+        i = "0" + i;
+      } // add zero in front of numbers < 10
+      return i;
+    }
+
+    window.onload = function() {
+      getTime();
+      var terminal = document.getElementById("terminal");
+      form = document.getElementsByTagName("form")[0];
+      form.addEventListener("submit", function(event) {
+        event.preventDefault();
+        var command = document.getElementById("command").value;
+        var output = "";
+        switch(command) {
+          case "ls":
+            output = "file1.txt file2.txt mrrobot.mp4";
+            break;
+          case "help":
+            output = "Don't trust anyone.";
+            break;
+          case "":
+            output = "";
+            break;
+          default:
+            output = command + ": command not found";
+        }
+        var p = document.createElement("p");
+        var span = document.createElement("span");
+        span.setAttribute("class", "prompt");
+        span.innerHTML = "$";
+        var textNode = document.createTextNode(command);
+        var outputNode = document.createTextNode(output);
+        p.appendChild(span);
+        p.appendChild(textNode);
+        p.appendChild(document.createElement("br"));
+        p.appendChild(outputNode);
+        terminal.appendChild(p);
+        document.getElementById("command").value = "";
+        terminal.scrollTop = terminal.scrollHeight;
+      });
+    }
+  </script>
 </body>
 </html>
