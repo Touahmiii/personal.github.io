@@ -1,130 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Mr. Robot Inspired Time Display</title>
-  <style>
-    body {
-      background-color: black;
-      color: #00FF00;
-      font-family: monospace;
-      font-size: 24px;
-      margin: 0;
-      padding: 0;
-    }
+<title>Mr. Robot Clock</title>
+<style>
+body {
+background-color: black;
+color: #2ecc71;
+font-size: 2em;
+font-family: monospace;
+}
 
-    ::-webkit-scrollbar {
-      width: 0.4em;
-    }
- 
-    ::-webkit-scrollbar-thumb {
-      background-color: #000;
-    }
+#clock {
+position: absolute;
+left: 50%;
+top: 50%;
+transform: translate(-50%, -50%);
+}
 
-    .prompt {
-      display: inline-block;
-      width: 2.5em;
-    }
+::selection {
+background-color: #2ecc71;
+color: black;
+}
 
-    #terminal {
-      height: 500px;
-      overflow-y: scroll;
-      padding-right: 0.5em;
-    }
-
-    input[type="text"] {
-      background-color: transparent;
-      border: none;
-      font-family: monospace;
-      font-size: 24px;
-      width: 90%;
-      outline: none;
-      color: #00FF00;
-    }
-
-    input[type="text"]:focus {
-      outline: none;
-    }
-
-    ::-webkit-input-placeholder {
-      color: #666;
-    }
-
-    :-moz-placeholder {
-      color: #666;
-    }
-
-    ::-moz-placeholder {
-      color: #666;
-    }
-
-    :-ms-input-placeholder {
-      color: #666;
-    }
-  </style>
+::-moz-selection {
+background-color: #2ecc71;
+color: black;
+}
+</style>
 </head>
 <body>
-  <div id="terminal">
-    <p><span class="prompt">⏰</span>Current Time: <span id="time"></span></p>
-  </div>
-  <form>
-    <input type="text" id="command" placeholder="Type in a command" autocomplete="off">
-  </form>
-  <script>
-    function getTime() {
-      var today = new Date();
-      var hours = today.getHours();
-      var minutes = today.getMinutes();
-      var seconds = today.getSeconds();
-      hours = checkTime(hours);
-      minutes = checkTime(minutes);
-      seconds = checkTime(seconds);
-      document.getElementById("time").innerHTML = hours + ":" + minutes + ":" + seconds;
-      var t = setTimeout(getTime, 1000);
-    }
+<div id="clock"></div>
 
-    function checkTime(i) {
-      if (i < 10) {
-        i = "0" + i;
-      } // add zero in front of numbers < 10
-      return i;
-    }
+<script>
+function clock() { 
+var d = new Date(); 
+var h = d.getHours(); 
+var m = d.getMinutes(); 
+var s = d.getSeconds(); 
 
-    window.onload = function() {
-      getTime();
-      var terminal = document.getElementById("terminal");
-      form = document.getElementsByTagName("form")[0];
-      form.addEventListener("submit", function(event) {
-        event.preventDefault();
-        var command = document.getElementById("command").value;
-        var output = "";
-        switch(command) {
-          case "ls":
-            output = "file1.txt file2.txt mrrobot.mp4";
-            break;
-          case "help":
-            output = "Don't trust anyone.";
-            break;
-          case "":
-            output = "";
-            break;
-          default:
-            output = command + ": command not found";
-        }
-        var p = document.createElement("p");
-        var span = document.createElement("span");
-        span.setAttribute("class", "prompt");
-        span.innerHTML = "$";
-        var textNode = document.createTextNode(command);
-        var outputNode = document.createTextNode(output);
-        p.appendChild(span);
-        p.appendChild(textNode);
-        p.appendChild(document.createElement("br"));
-        p.appendChild(outputNode);
-        terminal.appendChild(p);
-        document.getElementById("command").value = "";
-        terminal.scrollTop = terminal.scrollHeight;
-      });
-    }
-  </script>
+if (h < 10) h = '0' + h; 
+if (m < 10) m = '0' + m; 
+if (s < 10) s = '0' + s; 
+
+document.getElementById('clock').innerHTML = h + ':' + m + ':' + s; 
+}
+
+setInterval(clock, 1000); 
+</script>
+
+<blockquote>
+<p>"The world is a dangerous place Elliot, not because of those who do evil, but because of those who look on and do nothing" - Mr. Robot</p>
+</blockquote>
+
 </body>
 </html>
