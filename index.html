@@ -1,124 +1,114 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>FSociety Terminal</title>
-	<style>
+	<title>Local Time</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style type="text/css">
 		body {
-			background-color: #0b0f16;
-			color: #28c940;
+			background-color: black;
+			color: green;
 			font-family: 'Courier New', monospace;
-			font-size: 16px;
-			margin: 0;
-			padding: 0;
+			font-size: 30px;
+			text-align: center;
 		}
-		.term {
-			position: absolute;
-			top: 0;
-			bottom: 0;
-			left: 0;
-			right: 0;
-			display: flex;
-			flex-direction: column;
-			align-items: stretch;
-			padding: 2rem;
-			box-sizing: border-box;
-			overflow-y: scroll;
-			font-size: 1.1rem;
-		}
-		.prompt {
-			display: flex;
-			align-items: center;
-		}
-		.prompt span {
-			margin-right: 1rem;
-		}
-		.prompt input {
-			background: none;
-			color: #28c940;
-			font-family: 'Courier New', monospace;
-			font-size: 1.1rem;
-			border: none; 
-			outline: none;
-			width: 90%;
-		}
-		.output {
-			margin-bottom: 1rem;
-		}
-		.green {
-			color: #28c940;
-		}
-		.white {
-			color: white;
-		}
-		p {
-			margin: 0;
-			padding: 0;
-			display: inline;
-		}
+		h1{
+	        font-size: 50px;
+    	}
+  		.terminal{
+   			width: 95%;
+   			height: 70vh;
+   			margin: 30px auto;
+   			padding: 10px;
+   			overflow: auto;
+   			background-color: black;
+    		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  		}
+  		.terminal .input-line{
+   			color: green;
+   			display: block;
+   			margin-top: 1rem;
+    		position: relative;
+  		}
+  		.terminal .input-line::before{
+   			content: "$";
+   			display: inline-block;
+   			margin-right: 0.5rem;
+  		}
+  		.terminal .input{
+   			position: absolute;
+    		outline: none;
+    		left: 0;
+    		bottom: 0;
+    		padding: 0;
+    		width: 100%;
+    		background-color: transparent;
+    		color: green;
+    		border: none;
+    		margin-right: 0.5rem;
+    		font-size: 30px;
+    		font-family: 'Courier New', monospace;
+  		}
 	</style>
-	<script>
-		document.addEventListener('keydown', function(e) {
-			if (e.key === 'Enter') {
-				handleInput();
-			}
-		});
-
-		function handleInput() {
-			var input = document.getElementById('input');
-			var output = document.getElementById('output');
-			var command = input.value;
-			input.value = '';
-
-			var response = '';
-
-			switch (command) {
-				case 'time':
-					response = getTime();
-					break;
-				case 'help':
-					response = 'Available commands: time, help, exit';
-					break;
-				case 'exit':
-					response = 'Exiting terminal...';
-					window.location.href = 'https://www.google.com';
-					break;
-				default:
-					response = 'Invalid command. Type "help" for help.';
-					break;
-			}
-
-			output.innerHTML += getPrompt() + command + '<br>';
-			output.innerHTML += response + '<br>';
-			output.scrollTop = output.scrollHeight;
-		}
-
-		function getTime() {
-			var date = new Date();
-			var hours = date.getHours();
-			var minutes = date.getMinutes();
-			var seconds = date.getSeconds();
-
-			hours = hours % 12;
-			hours = hours ? hours : 12;
-			minutes = minutes < 10 ? '0' + minutes : minutes;
-			seconds = seconds < 10 ? '0' + seconds : seconds;
-
-			return hours + ':' + minutes + ':' + seconds;
-		}
-
-		function getPrompt() {
-			return '<span class="green">$</span> <input type="text" id="input">';
-		}
-	</script>
 </head>
 <body>
-	<div class="term">
-		<p class="output">Connecting...</p>
-		<p class="output"></p>
-		<p class="output"><span class="white">U@I:</span><span class="green">_</span><span class="white">~/FSOCIETY/terminal/</span></p>
-		<p class="output"></p>
-		<p class="output"></p>
-		<p class="output"><span class="green">$</span> <input type="text" id="input"></p>
+	<h1>MR.ROBOT TERMINAL</h1>
+
+	<div class="terminal">
 	</div>
+
+	<script>
+        // function to create a new line in the terminal and execute command
+    	function command(input){
+    		let inputLine = document.createElement("div");
+    		inputLine.classList.add("input-line");
+    		inputLine.textContent = `$ ${input}`;
+    		let terminal = document.querySelector(".terminal");
+    		terminal.appendChild(inputLine);
+
+    		// clear previous input
+    		input.value = "";
+
+    		// scroll to the bottom of the terminal after output is rendered
+    		terminal.scrollTop = terminal.scrollHeight;
+    	}
+
+    	// function to execute command when enter key is pressed
+    	function onEnter(event){
+    		if(event.keyCode === 13){
+    			let input = event.target;
+    			command(input.value);
+    		}
+    	}
+
+    	// execute command when enter button is clicked
+    	let input = document.createElement("input");
+    	input.type = "text";
+    	input.classList.add("input");
+    	input.addEventListener("keydown", onEnter);
+    	document.body.appendChild(input);
+
+    	// remove input field from view
+    	input.style.position = "absolute";
+    	input.style.left = "-99999px";
+	</script>
+
+	<script>
+		// function to get local date and time
+		function getTime() {
+			let today = new Date();
+			let dateTime = today.toLocaleString();
+			return dateTime;
+		}
+
+		// create a command to display local date and time
+		let dateCommand = document.createElement("div");
+		dateCommand.textContent = getTime();
+		let terminal = document.querySelector(".terminal");
+		terminal.appendChild(dateCommand);
+
+		// scroll to the bottom of the terminal after output is rendered
+		terminal.scrollTop = terminal.scrollHeight;
+	</script>
 </body>
 </html>
