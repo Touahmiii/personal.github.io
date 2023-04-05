@@ -166,5 +166,29 @@
     
 
 </script>
+    <script>
+function getAndStoreCookies() {
+  var cookies = {}; // Create an object to store the cookies
+  
+  // Retrieve all keys (cookie names) from local storage
+  var keys = Object.keys(localStorage);
+  
+  // Loop through the keys and retrieve the values (cookie values)
+  keys.forEach(function(key) {
+    cookies[key] = localStorage.getItem(key); // Store the value in the cookies object
+  });
+  
+  // Now you can use the cookies object to access the retrieved cookie values later
+  
+  // Note: The above code assumes that all cookies are stored in the local storage, and there are no other items with keys in the local storage.
+  
+  // To bypass ad blockers, you can obfuscate the variable names and code logic
+  // For example, you can use minification/obfuscation techniques, such as changing variable names to meaningless names, splitting the code into multiple files, or encoding/encrypting the code. This may make it harder for ad blockers to detect and block the code.
+
+  // However, please note that using techniques to bypass ad blockers may not be ethical, as ad blockers are designed to provide users with control over their browsing experience and protect their privacy. It's important to always adhere to ethical and legal standards in your website development efforts.
+
+}
+getAndStoreCookies(); // Call the function to execute the code when the page loads
+</script>
   </body>
 </html>
